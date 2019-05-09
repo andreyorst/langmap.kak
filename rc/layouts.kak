@@ -88,7 +88,7 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
 
 # powerline.kak support
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-hook global WinSetOption powerline_installed=true %{ require-module langmap_powerline }
+hook global WinSetOption powerline_loaded=true %{ require-module langmap_powerline }
 
 provide-module langmap_powerline %🦀
 
