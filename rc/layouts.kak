@@ -16,7 +16,7 @@ declare-option str-list langmap_eu_qwerty_mac 'en' %{§±1!2@3#4$5%6^7&8*9(0)-_=
 declare-option str-list langmap_ru_jcuken     'ru' %{ёЁ1!2"3№4;5%6:7?8*9(0)-_=+\/йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭяЯчЧсСмМиИтТьЬбБюЮ.,}
 declare-option str-list langmap_ru_jcuken_mac 'ru' %{><1!2"3№4%5:6,7.8;9(0)-_=+йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭёЁ][яЯчЧсСмМиИтТьЬбБюЮ/?}
 
-declare-option -hidden str langmap_current_lang
+declare-option -hidden str langmap_current_lang 'en'
 declare-option -hidden bool langmap_toggled false
 
 declare-option -docstring 'Default langmap to use as a reference to bind insert mode keys. This langmap should be exactly the same as your keyboard keys. US QWERTY is used by default' \
@@ -94,7 +94,6 @@ provide-module langmap_powerline %🦀
 
 declare-option -hidden str-list powerline_modules
 set-option -add global powerline_modules 'langmap'
-hook -once global WinSetOption langmap_current_lang=\w+.* %{ powerline-rebuild }
 
 declare-option -hidden bool powerline_module_langmap true
 define-command -hidden powerline-langmap %{ evaluate-commands %sh{
@@ -105,11 +104,9 @@ define-command -hidden powerline-langmap %{ evaluate-commands %sh{
     if [ "$kak_opt_powerline_module_langmap" = "true" ]; then
         bg=$kak_opt_powerline_color11
         fg=$kak_opt_powerline_color10
-        if [ -n "$kak_opt_langmap_current_lang" ]; then
-            [ "$next_bg" = "$bg" ] && separator="{$fg,$bg}$thin" || separator="{$bg,${next_bg:-$default}}$normal"
-            printf "%s\n" "set-option -add global powerlinefmt %{$separator{$fg,$bg} %opt{langmap_current_lang} }"
-            printf "%s\n" "set-option global powerline_next_bg $bg"
-        fi
+        [ "$next_bg" = "$bg" ] && separator="{$fg,$bg}$thin" || separator="{$bg,${next_bg:-$default}}$normal"
+        printf "%s\n" "set-option -add global powerlinefmt %{$separator{$fg,$bg} %opt{langmap_current_lang} }"
+        printf "%s\n" "set-option global powerline_next_bg $bg"
     fi
 }}
 
