@@ -11,13 +11,16 @@ declare-option -hidden bool langmap_installed true
 
 # Langmaps
 # ‾‾‾‾‾‾‾‾
-declare-option str-list langmap_us_qwerty 'us' %{`~1!2@3#4$5%6^7&8*9(0)-_=+\|qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/?}
-declare-option str-list langmap_ru_jcuken 'ru' %{ёЁ1!2"3№4;5%6:7?8*9(0)-_=+\/йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭяЯчЧсСмМиИтТьЬбБюЮ.,}
+declare-option str-list langmap_us_qwerty     'en' %{`~1!2@3#4$5%6^7&8*9(0)-_=+\|qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/?}
+declare-option str-list langmap_eu_qwerty_mac 'en' %{§±1!2@3#4$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"\|`~zZxXcCvVbBnNmM,<.>/?}
+declare-option str-list langmap_ru_jcuken     'ru' %{ёЁ1!2"3№4;5%6:7?8*9(0)-_=+\/йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭяЯчЧсСмМиИтТьЬбБюЮ.,}
+declare-option str-list langmap_ru_jcuken_mac 'ru' %{><1!2"3№4%5:6,7.8;9(0)-_=+йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭёЁ][яЯчЧсСмМиИтТьЬбБюЮ/?}
 
 declare-option -hidden str langmap_current_lang
 declare-option -hidden bool langmap_toggled false
 
-declare-option str-list langmap_default %opt{langmap_us_qwerty}
+declare-option -docstring 'Default langmap to use as a reference to bind insert mode keys. This langmap should be exactly the same as your keyboard keys. US QWERTY is used by default' \
+str-list langmap_default %opt{langmap_us_qwerty}
 declare-option -docstring 'Additional langmap to use in insert mode. Must be a str-list in the following format:
 lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
 str-list langmap
@@ -47,8 +50,8 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
         my @default = split //, $default; # creating arrays from langmap strings
         my @langmap = split //, $langmap;
 
-        if (scalar @default ne scalar @langmap) {
-            print "fail %{langmap sizes are not equal}";
+        if (scalar @default gt scalar @langmap) {
+            print "fail %{default langmap size is greater then additional langmap size}";
             exit();
         }
 
