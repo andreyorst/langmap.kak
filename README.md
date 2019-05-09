@@ -57,7 +57,7 @@ correctly, this option must be a `str-list` type, and store language name as
 it's first element, and all keyboard layout keys as a second element. For
 example, let's add Russian and English layouts for European Mac keyboard:
 
-``` sh
+```
 declare-option str-list langmap_ru_jcuken_mac 'ru' %{><1!2"3№4%5:6,7.8;9(0)-_=+йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭёЁ][яЯчЧсСмМиИтТьЬбБюЮ/?}
 declare-option str-list langmap_eu_qwerty_mac 'en' %{§±1!2@3#4$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"\|`~zZxXcCvVbBnNmM,<.>/?}
 ```
