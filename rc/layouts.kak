@@ -79,15 +79,15 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
         if ($ENV{kak_opt_langmap_toggled} eq "false") {
             $action = "map";
             if ($mode eq "insert") {
-                print "set-option global langmap_current_lang $langmap_name\n";
+                print "set-option buffer langmap_current_lang $langmap_name\n";
             }
-            print "set-option global langmap_toggled true\n";
+            print "set-option buffer langmap_toggled true\n";
         } else {
             $action = "unmap";
             if ($mode eq "insert") {
-                print "set-option global langmap_current_lang $default_name\n";
+                print "set-option buffer langmap_current_lang $default_name\n";
             }
-            print "set-option global langmap_toggled false\n";
+            print "set-option buffer langmap_toggled false\n";
         }
 
         # this loop maps our keys based on langmaps, but since first and last items are single
