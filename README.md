@@ -72,7 +72,19 @@ set-option global langmap %opt{langmap_ru_jcuken_mac}
 
 Of course these layouts are shipped with the plugin, but I don't have access to
 many keyboards, therefore I can't add most of the different layouts, so I will
-highly appreciate pull requests with additional langmaps.
+highly appreciate pull requests with additional langmaps. Check the order of
+keys in `langmap_us_qwerty` option. Usually it looks like this:
+
+    `~1!2@3#4$5%6^7&8*9(0)-_=+\| # for the upper row
+      qQwWeErRtTyYuUiIoOpP[{]}   # for the qwerty row
+       aAsSdDfFgGhHjJkKlL;:'"    # for the home row
+        zZxXcCvVbBnNmM,<.>/?     # for the bottom row
+
+Combined in single line. Note that despite the fact that <kbd>\\</kbd> on most
+keyboards is on the `qwerty` row, I've put it on the `upper` row because it is
+like so on my keyboards, and it was easier to add layouts this way. I've used it
+to add most layouts featured with this plugin, as well as Dvorak variants. If
+this will cause problems when adding langmas I'm open to tweak that.
 
 ## [powerline.kak][3] and `modeline` support
 This plugin supports **powerline.kak** plugin, and adds a `langmap` module to
