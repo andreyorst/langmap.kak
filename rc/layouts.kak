@@ -9,12 +9,25 @@
 
 declare-option -hidden bool langmap_installed true
 
-# Langmaps
-# ‾‾‾‾‾‾‾‾
-declare-option str-list langmap_us_qwerty     'en' %{`~1!2@3#4$5%6^7&8*9(0)-_=+\|qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/?}
-declare-option str-list langmap_eu_qwerty_mac 'en' %{§±1!2@3#4$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"\|`~zZxXcCvVbBnNmM,<.>/?}
-declare-option str-list langmap_ru_jcuken     'ru' %{ёЁ1!2"3№4;5%6:7?8*9(0)-_=+\/йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭяЯчЧсСмМиИтТьЬбБюЮ.,}
-declare-option str-list langmap_ru_jcuken_mac 'ru' %{><1!2"3№4%5:6,7.8;9(0)-_=+йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭёЁ][яЯчЧсСмМиИтТьЬбБюЮ/?}
+# General langmaps
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+declare-option -docstring 'English key layout for US qwerty keyboards' str-list langmap_us_qwerty 'en' %{`~1!2@3#4$5%6^7&8*9(0)-_=+\|qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/?}
+declare-option -docstring 'Russian key layout for jcuken keyboards'    str-list langmap_ru_jcuken 'ru' %{ёЁ1!2"3№4;5%6:7?8*9(0)-_=+\/йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭяЯчЧсСмМиИтТьЬбБюЮ.,}
+declare-option -docstring 'French key layout for azerty keyboards'     str-list langmap_fr_azerty 'fr' %{²~&1é2"3'4(5-6è7_8ç9à0)°=+*µaAzZeErRtTyYuUiIoOpP^¨$£qQsSdDfFgGhHjJkKlLmMù%wWxXcCvVbBnN,?;.:/!§}
+declare-option -docstring 'German key layout for qwertz keyboards'     str-list langmap_de_qwertz 'de' %{^°1!2"3§4$5%6&7/8(9)0=ß?´`#'qQwWeErRtTzZuUiIoOpPüÜ+*aAsSdDfFgGhHjJkKlLöÖäÄyYxXcCvVbBnNmM,;.:-_}
+declare-option -docstring 'Spanish key layout for qwerty keyboards'    str-list langmap_es_qwerty 'es' %{ºª1!2"3·4$5%6&7/8(9)0='?¡¿çÇqQwWeErRtTyYuUiIoOpP`^+*aAsSdDfFgGhHjJkKlLñÑ´¨zZxXcCvVbBnNmM,;.:-_}
+
+# Dvorak langmaps
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+declare-option -docstring 'English key layout for US Dvorak keyboards' str-list langmap_us_dvorak 'en' %{`~1!2@3#4$5%6^7&8*9(0)[{]}\|'",<.>pPyYfFgGcCrRlL/?=+aAoOeEuUiIdDhHtTnNsS-_;:qQjJkKxXbBmMwWvVzZ}
+declare-option -docstring 'German key layout for Dvorak keyboards'     str-list langmap_de_dvorak 'de' %{^°1!2"3§4$5%6&7/8(9)0=+*<>-_üÜ,;.:pPyYfFgGcCtTzZ?ß/\aAoOeEiIuUhHdDrRnNsSlLöÖqQjJkKxXbBmMwWvV#'}
+declare-option -docstring 'Russian key layout for Dvorak keyboards'    str-list langmap_ru_dvorak 'ru' %{юЮ1!2@3ё4Ё5ъ6Ъ7&8*9(0)шШщЩэЭ'",<.>пПыЫфФгГцЦрРлЛ/?чЧаАоОеЕуУиИдДхХтТнНсС-_;:яЯйЙкКьЬбБмМвВжЖзЗ}
+declare-option -docstring 'French key layout for Dvorak keyboards'     str-list langmap_fr_dvorak 'fr' %{_*=1/2-3è4\5^6(7`8)9"0[+]%~#:?'<é>gG.!hHvVcCmMkKzZ¨&oOaAuUeEbBfFsStTnNdDwW;|qQ,@iIyYxXrRlLpPjJ}
+
+# Macbook langmaps
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+declare-option -docstring 'English key layout for EU qwerty Macbook keyboards' str-list langmap_eu_qwerty_mac 'en' %{§±1!2@3#4$5%6^7&8*9(0)-_=+qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"\|`~zZxXcCvVbBnNmM,<.>/?}
+declare-option -docstring 'Russian key layout for EU jcuken Macbook keyboards' str-list langmap_ru_jcuken_mac 'ru' %{><1!2"3№4%5:6,7.8;9(0)-_=+йЙцЦуУкКеЕнНгГшШщЩзЗхХъЪфФыЫвВаАпПрРоОлЛдДжЖэЭёЁ][яЯчЧсСмМиИтТьЬбБюЮ/?}
 
 declare-option -hidden str langmap_current_lang 'en'
 declare-option -hidden bool langmap_toggled false
