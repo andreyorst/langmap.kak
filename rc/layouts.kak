@@ -19,10 +19,11 @@ declare-option -docstring 'Spanish key layout for qwerty keyboards'    str-list 
 
 # Dvorak langmaps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-declare-option -docstring 'English key layout for US Dvorak keyboards' str-list langmap_us_dvorak 'en' %{`~1!2@3#4$5%6^7&8*9(0)[{]}\|'",<.>pPyYfFgGcCrRlL/?=+aAoOeEuUiIdDhHtTnNsS-_;:qQjJkKxXbBmMwWvVzZ}
-declare-option -docstring 'German key layout for Dvorak keyboards'     str-list langmap_de_dvorak 'de' %{^°1!2"3§4$5%6&7/8(9)0=+*<>-_üÜ,;.:pPyYfFgGcCtTzZ?ß/\aAoOeEiIuUhHdDrRnNsSlLöÖqQjJkKxXbBmMwWvV#'}
-declare-option -docstring 'Russian key layout for Dvorak keyboards'    str-list langmap_ru_dvorak 'ru' %{юЮ1!2@3ё4Ё5ъ6Ъ7&8*9(0)шШщЩэЭ'",<.>пПыЫфФгГцЦрРлЛ/?чЧаАоОеЕуУиИдДхХтТнНсС-_;:яЯйЙкКьЬбБмМвВжЖзЗ}
-declare-option -docstring 'French key layout for Dvorak keyboards'     str-list langmap_fr_dvorak 'fr' %{_*=1/2-3è4\5^6(7`8)9"0[+]%~#:?'<é>gG.!hHvVcCmMkKzZ¨&oOaAuUeEbBfFsStTnNdDwW;|qQ,@iIyYxXrRlLpPjJ}
+declare-option -docstring 'English key layout for Dvorak keyboards' str-list langmap_us_dvorak 'en' %{`~1!2@3#4$5%6^7&8*9(0)[{]}\|'",<.>pPyYfFgGcCrRlL/?=+aAoOeEuUiIdDhHtTnNsS-_;:qQjJkKxXbBmMwWvVzZ}
+declare-option -docstring 'German key layout for Dvorak keyboards'  str-list langmap_de_dvorak 'de' %{^°1!2"3§4$5%6&7/8(9)0=+*<>-_üÜ,;.:pPyYfFgGcCtTzZ?ß/\aAoOeEiIuUhHdDrRnNsSlLöÖqQjJkKxXbBmMwWvV#'}
+declare-option -docstring 'Russian key layout for Dvorak keyboards' str-list langmap_ru_dvorak 'ru' %{юЮ1!2@3ё4Ё5ъ6Ъ7&8*9(0)шШщЩэЭ'",<.>пПыЫфФгГцЦрРлЛ/?чЧаАоОеЕуУиИдДхХтТнНсС-_;:яЯйЙкКьЬбБмМвВжЖзЗ}
+declare-option -docstring 'French key layout for Dvorak keyboards'  str-list langmap_fr_dvorak 'fr' %{_*=1/2-3è4\5^6(7`8)9"0[+]%~#:?'<é>gG.!hHvVcCmMkKzZ¨&oOaAuUeEbBfFsStTnNdDwW;|qQ,@iIyYxXrRlLpPjJ}
+declare-option -docstring 'Spanish key layout for Dvorak keyboards' str-list langmap_es_dvorak 'es' %{ºª1!2"3·4$5%6&7/8(9)0='?¡¿çÇ.:,;ñÑpPyYfFgGcChHlL`^+*aAoOeEuUiIdDrRtTnNsS´¨-_qQjJkKxXbBmMwWvVzZ}
 
 # Macbook langmaps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
