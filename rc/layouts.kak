@@ -98,6 +98,29 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
     ' $map_mode $kak_opt_langmap_default $kak_opt_langmap
 }}
 
+define-command -docstring 'langmap-display-layout <langmap>: display <langmap> option value in info box formatted as keyboard layout. Accepts ''%opt{langmap_lang_map}'' or str-list formatted langmap as a parameter' \
+langmap-display-layout -params 2 %{ evaluate-commands %sh{
+    perl -CAEIO -e '
+        use strict;
+        use utf8;
+
+        my $name   = $ARGV[0];
+        my $layout = $ARGV[1];
+
+        $layout =~ s/\\'\'\''//g;
+
+        my $upper_row  = substr $layout, 0, 28, '';
+        my $qwerty_row = substr $layout, 28, 24, '';
+        my $home_row   = substr $layout, 52, 22, '';
+        my $bottom_row = substr $layout, 74, '';
+
+        print "info -title %{langmap for $name} %{$upper_row
+  $qwerty_row
+   $home_row
+    $bottom_row}"
+    ' $@
+}}
+
 🐙
 
 # powerline.kak support
