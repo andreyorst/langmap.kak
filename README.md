@@ -20,6 +20,7 @@ Add this to your `kakrc`:
 plug "andreyorst/langmap.kak" config %{
     # add needed extra layout, for example Russian 'йцукен'
     set-option global langmap %opt{langmap_ru_jcuken}
+} defer "langmap" %{
     # optional: mappings to toggle langmap
     map -docstring "toggle layout (C-\)" global normal '' ':      toggle-langmap<ret>'
     map -docstring "toggle layout (C-\)" global insert '' '<a-;>: toggle-langmap<ret>'
