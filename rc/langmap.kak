@@ -7,7 +7,15 @@
 # │ GitHub.com/andreyorst/langmap.kak │
 # ╰───────────────────────────────────╯
 
-declare-option -hidden bool langmap_installed true
+hook -once -group langmap-loader global WinSetOption langmap=.* %{ require-module langmap }
+
+declare-option -docstring 'Default langmap to use as a reference to bind insert mode keys. This langmap should be exactly the same as your keyboard keys. US QWERTY is used by default' \
+str-list langmap_default %opt{langmap_us_qwerty}
+declare-option -docstring 'Additional langmap to use in insert mode. Must be a str-list in the following format:
+lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
+str-list langmap
+
+provide-module langmap %🐙
 
 # General langmaps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -33,18 +41,8 @@ declare-option -docstring 'Russian key layout for EU jcuken Macbook keyboards' s
 declare-option -hidden str langmap_current_lang 'en'
 declare-option -hidden bool langmap_toggled false
 
-declare-option -docstring 'Default langmap to use as a reference to bind insert mode keys. This langmap should be exactly the same as your keyboard keys. US QWERTY is used by default' \
-str-list langmap_default %opt{langmap_us_qwerty}
-declare-option -docstring 'Additional langmap to use in insert mode. Must be a str-list in the following format:
-lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
-str-list langmap
-
 # Code
 # ‾‾‾‾
-hook -once global WinSetOption langmap=.* %{ require-module langmap }
-
-provide-module langmap %🐙
-
 define-command -override -docstring "toggle-langmap <mode>: toggle between keyboard langmaps in insert mode only" \
 toggle-langmap -params ..1 %{ evaluate-commands %sh{
     map_mode=${1:-insert}
@@ -63,6 +61,11 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
 
         my @default = split //, $default; # creating arrays from langmap strings
         my @langmap = split //, $langmap;
+
+        if (scalar @langmap eq 0) {
+            print "fail %{additional langmap is not set}";
+            exit();
+        }
 
         if (scalar @default gt scalar @langmap) {
             print "fail %{default langmap size is greater then additional langmap size}";
@@ -128,6 +131,9 @@ langmap-display-layout -params 2 %{ evaluate-commands %sh{
 hook global ModuleLoad powerline %{ require-module langmap_powerline }
 
 provide-module langmap_powerline %🦀
+
+require-module langmap
+remove-hooks global langmap-loader
 
 declare-option -hidden str-list powerline_modules
 set-option -add global powerline_modules 'langmap'
