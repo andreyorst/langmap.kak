@@ -9,14 +9,6 @@
 
 hook -once -group langmap-loader global WinSetOption langmap=.* %{ require-module langmap }
 
-declare-option -docstring 'Default langmap to use as a reference to bind insert mode keys. This langmap should be exactly the same as your keyboard keys. US QWERTY is used by default' \
-str-list langmap_default %opt{langmap_us_qwerty}
-declare-option -docstring 'Additional langmap to use in insert mode. Must be a str-list in the following format:
-lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
-str-list langmap
-
-provide-module langmap %🐙
-
 # General langmaps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 declare-option -docstring 'English key layout for US qwerty keyboards' str-list langmap_us_qwerty 'en' %{`~1!2@3#4$5%6^7&8*9(0)-_=+\|qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/?}
@@ -40,6 +32,15 @@ declare-option -docstring 'Russian key layout for EU jcuken Macbook keyboards' s
 
 declare-option -hidden str langmap_current_lang 'en'
 declare-option -hidden bool langmap_toggled false
+
+declare-option -docstring 'Default langmap to use as a reference to bind insert mode keys. This langmap should be exactly the same as your keyboard keys. US QWERTY is used by default' \
+str-list langmap_default %opt{langmap_us_qwerty}
+
+declare-option -docstring 'Additional langmap to use in insert mode. Must be a str-list in the following format:
+lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
+str-list langmap
+
+provide-module langmap %🐙
 
 # Code
 # ‾‾‾‾
