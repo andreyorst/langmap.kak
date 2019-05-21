@@ -47,9 +47,13 @@ provide-module langmap %🐙
 define-command -override -docstring "toggle-langmap <mode>: toggle between keyboard langmaps in insert mode only" \
 toggle-langmap -params ..1 %{ evaluate-commands %sh{
     map_mode=${1:-insert}
-    perl -CAEIO -e '
+    perl -e '
         use strict;
         use utf8;
+        use open qw(:encoding(UTF-8) :std);
+        use Encode qw(decode_utf8);
+
+        @ARGV = map {decode_utf8($_, 1)} @ARGV;
 
         my $mode         = $ARGV[0]; # currently only insert and prompt mode are supported
         my $default_name = $ARGV[1]; # name of the default langmap for the modeline
