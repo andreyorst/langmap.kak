@@ -9,6 +9,8 @@
 
 hook -once -group langmap-loader global WinSetOption langmap=.* %{ require-module langmap }
 
+declare-option -hidden str langmap_source %val{source}
+
 # General langmaps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 declare-option -docstring 'English key layout for US qwerty keyboards' str-list langmap_us_qwerty 'en' %{`~1!2@3#4$5%6^7&8*9(0)-_=+\|qQwWeErRtTyYuUiIoOpP[{]}aAsSdDfFgGhHjJkKlL;:'"zZxXcCvVbBnNmM,<.>/?}
@@ -47,63 +49,23 @@ provide-module langmap %🐙
 define-command -override -docstring "toggle-langmap <mode>: toggle between keyboard langmaps in insert mode only" \
 toggle-langmap -params ..1 %{ evaluate-commands %sh{
     map_mode=${1:-insert}
-    perl -e '
-        use strict;
-        use utf8;
-        use open qw(:encoding(UTF-8) :std);
-        use Encode qw(decode_utf8);
-
-        @ARGV = map {decode_utf8($_, 1)} @ARGV;
-
-        my $mode         = $ARGV[0]; # currently only insert and prompt mode are supported
-        my $default_name = $ARGV[1]; # name of the default langmap for the modeline
-        my $default      = $ARGV[2]; # default langmap string
-        my $langmap_name = $ARGV[3]; # name of the additional langmap for the modeline
-        my $langmap      = $ARGV[4]; # additional langmap string
-
-        $default =~ s/\\'\'\''//g; # Kakoune escapes single quote when passing option to the script
-        $langmap =~ s/\\'\'\''//g; # so we need to remove the escaping part from the string before split
-
-        my @default = split //, $default; # creating arrays from langmap strings
-        my @langmap = split //, $langmap;
-
-        if (scalar @langmap eq 0) {
-            print "fail %{additional langmap is not set}";
-            exit();
-        }
-
-        if (scalar @default gt scalar @langmap) {
-            print "fail %{default langmap size is greater then additional langmap size}";
-            exit();
-        }
-
-        if (scalar @default eq 0 || scalar @langmap eq 0) {
-            print "fail %{langmap size is zero}";
-            exit();
-        }
-
-        my $action; # action to perform: map or unmap
-
-        if ($ENV{kak_opt_langmap_toggled} eq "false") {
-            $action = "map";
-            if ($mode eq "insert") {
-                print "set-option buffer langmap_current_lang $langmap_name\n";
-            }
-            print "set-option buffer langmap_toggled true\n";
-        } else {
-            $action = "unmap";
-            if ($mode eq "insert") {
-                print "set-option buffer langmap_current_lang $default_name\n";
-            }
-            print "set-option buffer langmap_toggled false\n";
-        }
-
-        # this loop maps our keys based on langmaps, but since first and last items are single
-        # quotes added by Kakoune we skip them
-        for my $i (1 .. $#default - 1) {
-            print "$action buffer $mode -- %🦀$default[$i]🦀 %🦀$langmap[$i]🦀\n";
-        }
-    ' $map_mode $kak_opt_langmap_default $kak_opt_langmap
+    # portable version of `dirname'
+    dir_name() {
+        filename=$1
+        case "$filename" in
+          */*[!/]*)
+            trail=${filename##*[!/]}
+            filename=${filename%%"$trail"}
+            dir=${filename%/*};;
+          *[!/]*)
+            trail=${filename##*[!/]}
+            dir=".";;
+          *) dir="/";;
+        esac
+        printf "%s\n" "$dir"
+    }
+    langmap_dir=$(dir_name $kak_opt_langmap_source)
+    perl $langmap_dir/../perl/langmap.pl $kak_client $map_mode $kak_opt_langmap_default $kak_opt_langmap | kak -p $kak_session
 }}
 
 define-command -docstring 'langmap-display-layout <langmap>: display <langmap> option value in info box formatted as keyboard layout. Accepts ''%opt{langmap_lang_map}'' or str-list formatted langmap as a parameter' \
