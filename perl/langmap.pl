@@ -7,24 +7,24 @@ use Encode qw(decode_utf8);
 
 @ARGV = map {decode_utf8($_, 1)} @ARGV;
 
-my $client       = $ARGV[0]; # get current client
-my $mode         = $ARGV[1]; # currently only insert and prompt mode are supported
-my $state        = $ARGV[2]; # current state of langmap
-my $default_name = $ARGV[3]; # name of the default langmap for the modeline
-my $default      = $ARGV[4]; # default langmap string
-my $langmap_name = $ARGV[5]; # name of the additional langmap for the modeline
-my $langmap      = $ARGV[6]; # additional langmap string
-my $action;                  # action to perform: map or unmap
+my $mode         = $ARGV[0]; # currently only insert and prompt mode are supported
+my $default_name = $ARGV[1]; # name of the default langmap for the modeline
+my $default      = $ARGV[2]; # default langmap string
+my $langmap_name = $ARGV[3]; # name of the additional langmap for the modeline
+my $langmap      = $ARGV[4]; # additional langmap string
 
-$default =~ s/'\\\''/'/g; # Kakoune escapes single quote when passing option to the script
-$langmap =~ s/'\\\''/'/g; # so we need to remove the escaping part from the string before split
+my $action; # action to perform: map or unmap
+my $client = $ENV{kak_client}; # current client
 
-my @default = split //, $default; # creating arrays from langmap strings
+$default =~ s/^'|'$|'\\\'\'/'/g; # Kakoune quotes options and escapes single quotes inside when passing options to
+$langmap =~ s/^'|'$|'\\\'\'/'/g; # script, so we need to remove the escaping part and wrapping quotes before split
+
+# creating arrays from langmap strings
+my @default = split //, $default;
 my @langmap = split //, $langmap;
 
 if (scalar @langmap eq 0) {
     print "evaluate-commands -client $client %🐙 fail %{additional langmap is not set} 🐙\n";
-    print "evaluate-commands -client $client %🐙 echo -debug %{$default} 🐙\n";
     exit();
 }
 
@@ -38,7 +38,7 @@ if (scalar @default eq 0 || scalar @langmap eq 0) {
     exit();
 }
 
-if ($state eq "false") {
+if ($ENV{"kak_opt_langmap_toggled"} eq "false") {
     $action = "map";
     if ($mode eq "insert") {
         print "evaluate-commands -client $client %🐙 set-option buffer langmap_current_lang $langmap_name 🐙\n";
@@ -54,7 +54,7 @@ if ($state eq "false") {
 
 # this loop maps our keys based on langmaps, but since first and last items are single
 # quotes added by Kakoune we skip them
-for my $i (1 .. $#default - 1) {
+for my $i (0 .. $#default) {
     print "evaluate-commands -client $client %🐙 $action buffer $mode -- %🦀$default[$i]🦀 %🦀$langmap[$i]🦀 🐙\n";
 }
 

@@ -42,63 +42,70 @@ declare-option -docstring 'Additional langmap to use in insert mode. Must be a s
 lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
 str-list langmap
 
-provide-module langmap %🐙
+provide-module langmap %{
 
 # Code
 # ‾‾‾‾
 define-command -override -docstring "toggle-langmap <mode>: toggle between keyboard langmaps in insert mode only" \
-toggle-langmap -params ..1 %{ evaluate-commands %sh{
+toggle-langmap -params ..1 %{ evaluate-commands -client %val{client} %sh{
     map_mode=${1:-insert}
-    state=${kak_opt_langmap_toggled:-false}
     # portable version of `dirname'
     dir_name() {
         filename=$1
         case "$filename" in
-          */*[!/]*)
-            trail=${filename##*[!/]}
-            filename=${filename%%"$trail"}
-            dir=${filename%/*};;
-          *[!/]*)
-            trail=${filename##*[!/]}
-            dir=".";;
-          *) dir="/";;
+            */*[!/]*)
+                trail=${filename##*[!/]}
+                filename=${filename%%"$trail"}
+                dir=${filename%/*};;
+            *[!/]*)
+                trail=${filename##*[!/]}
+                dir=".";;
+            *)
+                dir="/";;
         esac
         printf "%s\n" "$dir"
     }
+
+    # hack to bring options to the scope:
+    # $kak_opt_langmap_toggled
+    # $kak_client
+
     langmap_dir=$(dir_name $kak_opt_langmap_source)
-    perl $langmap_dir/../perl/langmap.pl $kak_client $map_mode $state $kak_opt_langmap_default $kak_opt_langmap | kak -p $kak_session
+    perl $langmap_dir/../perl/langmap.pl $map_mode $kak_opt_langmap_default $kak_opt_langmap | kak -p $kak_session
 }}
 
 define-command -docstring 'langmap-display-layout <langmap>: display <langmap> option value in info box formatted as keyboard layout. Accepts ''%opt{langmap_lang_map}'' or str-list formatted langmap as a parameter' \
 langmap-display-layout -params 2 %{ evaluate-commands %sh{
-    perl -CAEIO -e '
-        use strict;
-        use utf8;
+    dir_name() {
+        filename=$1
+        case "$filename" in
+            */*[!/]*)
+                trail=${filename##*[!/]}
+                filename=${filename%%"$trail"}
+                dir=${filename%/*} ;;
+            *[!/]*)
+                trail=${filename##*[!/]}
+                dir="." ;;
+            *)
+                dir="/" ;;
+        esac
+        printf "%s\n" "$dir"
+    }
 
-        my $name   = $ARGV[0];
-        my $layout = $ARGV[1];
+    # hack to bring options to the scope:
+    # $kak_client
 
-        $layout =~ s/\\'\'\''//g;
-
-        my $upper_row  = substr $layout, 0, 28, '';
-        my $qwerty_row = substr $layout, 28, 24, '';
-        my $home_row   = substr $layout, 52, 22, '';
-        my $bottom_row = substr $layout, 74, '';
-
-        print "info -title %{langmap for $name} %{$upper_row
-  $qwerty_row
-   $home_row
-    $bottom_row}"
-    ' $@
+    langmap_dir=$(dir_name $kak_opt_langmap_source)
+    perl $langmap_dir/../perl/display_layout.pl $@ | kak -p $kak_session
 }}
 
-🐙
+}
 
 # powerline.kak support
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 hook global ModuleLoad powerline %{ require-module langmap_powerline }
 
-provide-module langmap_powerline %🦀
+provide-module langmap_powerline %{
 
 require-module langmap
 remove-hooks global langmap-loader
@@ -130,5 +137,4 @@ define-command -hidden powerline-toggle-langmap -params ..1 %{ evaluate-commands
     printf "%s\n" "powerline-rebuild"
 }}
 
-🦀
-
+}
