@@ -7,7 +7,13 @@
 # │ GitHub.com/andreyorst/langmap.kak │
 # ╰───────────────────────────────────╯
 
-hook -once -group langmap-loader global WinSetOption langmap=.* %{ require-module langmap }
+declare-option -docstring 'Additional langmap to use in insert mode. Must be a str-list in the following format:
+lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
+str-list langmap
+
+hook -once -group langmap-loader global WinSetOption langmap=.+ %{ require-module langmap }
+
+provide-module langmap %🐙
 
 # General langmaps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -35,12 +41,6 @@ declare-option -hidden bool langmap_toggled false
 
 declare-option -docstring 'Default langmap to use as a reference to bind insert mode keys. This langmap should be exactly the same as your keyboard keys. US QWERTY is used by default' \
 str-list langmap_default %opt{langmap_us_qwerty}
-
-declare-option -docstring 'Additional langmap to use in insert mode. Must be a str-list in the following format:
-lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
-str-list langmap
-
-provide-module langmap %🐙
 
 # Code
 # ‾‾‾‾
@@ -145,26 +145,27 @@ hook global ModuleLoad powerline %{ require-module langmap_powerline }
 
 provide-module langmap_powerline %🦀
 
-require-module langmap
-remove-hooks global langmap-loader
-
 declare-option -hidden str-list powerline_modules
 set-option -add global powerline_modules 'langmap'
 
 declare-option -hidden bool powerline_module_langmap true
-define-command -hidden powerline-langmap %{ evaluate-commands %sh{
-    default=$kak_opt_powerline_base_bg
-    next_bg=$kak_opt_powerline_next_bg
-    normal=$kak_opt_powerline_separator
-    thin=$kak_opt_powerline_separator_thin
-    if [ "$kak_opt_powerline_module_langmap" = "true" ]; then
-        bg=$kak_opt_powerline_color11
-        fg=$kak_opt_powerline_color10
-        [ "$next_bg" = "$bg" ] && separator="{$fg,$bg}$thin" || separator="{$bg,${next_bg:-$default}}$normal"
-        printf "%s\n" "set-option -add global powerlinefmt %{$separator{$fg,$bg} %opt{langmap_current_lang} }"
-        printf "%s\n" "set-option global powerline_next_bg $bg"
-    fi
-}}
+define-command -hidden powerline-langmap %{
+    require-module langmap
+    remove-hooks global langmap-loader
+    evaluate-commands %sh{
+        default=$kak_opt_powerline_base_bg
+        next_bg=$kak_opt_powerline_next_bg
+        normal=$kak_opt_powerline_separator
+        thin=$kak_opt_powerline_separator_thin
+        if [ "$kak_opt_powerline_module_langmap" = "true" ]; then
+            bg=$kak_opt_powerline_color11
+            fg=$kak_opt_powerline_color10
+            [ "$next_bg" = "$bg" ] && separator="{$fg,$bg}$thin" || separator="{$bg,${next_bg:-$default}}$normal"
+            printf "%s\n" "set-option -add global powerlinefmt %{$separator{$fg,$bg} %opt{langmap_current_lang} }"
+            printf "%s\n" "set-option global powerline_next_bg $bg"
+        fi
+    }
+}
 
 define-command -hidden powerline-toggle-langmap -params ..1 %{ evaluate-commands %sh{
     [ "$kak_opt_powerline_module_langmap" = "true" ] && value=false || value=true
