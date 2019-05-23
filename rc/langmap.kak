@@ -50,7 +50,9 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
     perl -e '
         use strict;
         use utf8;
-        use open qw(:encoding(UTF-8) :std);
+        binmode STDIN, ":utf8";
+        binmode STDOUT, ":utf8";
+        binmode STDERR, ":utf8";
         use Encode qw(decode_utf8);
 
         @ARGV = map {decode_utf8($_, 1)} @ARGV;
@@ -108,9 +110,15 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
 
 define-command -docstring 'langmap-display-layout <langmap>: display <langmap> option value in info box formatted as keyboard layout. Accepts ''%opt{langmap_lang_map}'' or str-list formatted langmap as a parameter' \
 langmap-display-layout -params 2 %{ evaluate-commands %sh{
-    perl -CAEIO -e '
+    perl -e '
         use strict;
         use utf8;
+        binmode STDIN, ":utf8";
+        binmode STDOUT, ":utf8";
+        binmode STDERR, ":utf8";
+        use Encode qw(decode_utf8);
+
+        @ARGV = map {decode_utf8($_, 1)} @ARGV;
 
         my $name   = $ARGV[0];
         my $layout = $ARGV[1];
