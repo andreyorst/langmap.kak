@@ -9,10 +9,12 @@ use Encode qw(decode_utf8);
 
 my $client       = $ARGV[0]; # get current client
 my $mode         = $ARGV[1]; # currently only insert and prompt mode are supported
-my $default_name = $ARGV[2]; # name of the default langmap for the modeline
-my $default      = $ARGV[3]; # default langmap string
-my $langmap_name = $ARGV[4]; # name of the additional langmap for the modeline
-my $langmap      = $ARGV[5]; # additional langmap string
+my $state        = $ARGV[2]; # current state of langmap
+my $default_name = $ARGV[3]; # name of the default langmap for the modeline
+my $default      = $ARGV[4]; # default langmap string
+my $langmap_name = $ARGV[5]; # name of the additional langmap for the modeline
+my $langmap      = $ARGV[6]; # additional langmap string
+my $action;                  # action to perform: map or unmap
 
 $default =~ s/'\\\''/'/g; # Kakoune escapes single quote when passing option to the script
 $langmap =~ s/'\\\''/'/g; # so we need to remove the escaping part from the string before split
@@ -21,7 +23,8 @@ my @default = split //, $default; # creating arrays from langmap strings
 my @langmap = split //, $langmap;
 
 if (scalar @langmap eq 0) {
-    print "evaluate-commands -client $client %🐙 fail %{additional langmap is not set} 🐙";
+    print "evaluate-commands -client $client %🐙 fail %{additional langmap is not set} 🐙\n";
+    print "evaluate-commands -client $client %🐙 echo -debug %{$default} 🐙\n";
     exit();
 }
 
@@ -31,13 +34,11 @@ if (scalar @default gt scalar @langmap) {
 }
 
 if (scalar @default eq 0 || scalar @langmap eq 0) {
-    print "evaluate-commands -client $client %🐙 fail %{langmap size is zero}🐙";
+    print "evaluate-commands -client $client %🐙 fail %{langmap size is zero} 🐙\n";
     exit();
 }
 
-my $action; # action to perform: map or unmap
-
-if ($ENV{kak_opt_langmap_toggled} eq "false") {
+if ($state eq "false") {
     $action = "map";
     if ($mode eq "insert") {
         print "evaluate-commands -client $client %🐙 set-option buffer langmap_current_lang $langmap_name 🐙\n";

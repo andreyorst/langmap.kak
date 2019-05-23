@@ -49,6 +49,7 @@ provide-module langmap %🐙
 define-command -override -docstring "toggle-langmap <mode>: toggle between keyboard langmaps in insert mode only" \
 toggle-langmap -params ..1 %{ evaluate-commands %sh{
     map_mode=${1:-insert}
+    state=${kak_opt_langmap_toggled:-false}
     # portable version of `dirname'
     dir_name() {
         filename=$1
@@ -65,7 +66,7 @@ toggle-langmap -params ..1 %{ evaluate-commands %sh{
         printf "%s\n" "$dir"
     }
     langmap_dir=$(dir_name $kak_opt_langmap_source)
-    perl $langmap_dir/../perl/langmap.pl $kak_client $map_mode $kak_opt_langmap_default $kak_opt_langmap | kak -p $kak_session
+    perl $langmap_dir/../perl/langmap.pl $kak_client $map_mode $state $kak_opt_langmap_default $kak_opt_langmap | kak -p $kak_session
 }}
 
 define-command -docstring 'langmap-display-layout <langmap>: display <langmap> option value in info box formatted as keyboard layout. Accepts ''%opt{langmap_lang_map}'' or str-list formatted langmap as a parameter' \
