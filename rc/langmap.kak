@@ -9,7 +9,9 @@
 
 hook -once -group langmap-loader global WinSetOption langmap=.* %{ require-module langmap }
 
-declare-option -hidden str langmap_source %val{source}
+declare-option -hidden -docstring %sh{printf "%s\n" "location of the langmap plugin root directory.
+        Value: ${kak_source%/rc/*}"} \
+str langmap_root %sh{printf "%s\n" "${kak_source%/rc/*}"}
 
 # General langmaps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -49,54 +51,14 @@ provide-module langmap %{
 define-command -override -docstring "toggle-langmap <mode>: toggle between keyboard langmaps in insert mode only" \
 toggle-langmap -params ..1 %{ evaluate-commands -client %val{client} %sh{
     map_mode=${1:-insert}
-    # portable version of `dirname'
-    dir_name() {
-        filename=$1
-        case "$filename" in
-            */*[!/]*)
-                trail=${filename##*[!/]}
-                filename=${filename%%"$trail"}
-                dir=${filename%/*};;
-            *[!/]*)
-                trail=${filename##*[!/]}
-                dir=".";;
-            *)
-                dir="/";;
-        esac
-        printf "%s\n" "$dir"
-    }
-
-    # hack to bring options to the scope:
-    # $kak_opt_langmap_toggled
-    # $kak_client
-
-    langmap_dir=$(dir_name $kak_opt_langmap_source)
-    perl $langmap_dir/../perl/langmap.pl $map_mode $kak_opt_langmap_default $kak_opt_langmap | kak -p $kak_session
+    # $kak_opt_langmap_toggled $kak_client
+    perl $kak_opt_langmap_root/perl/langmap.pl $map_mode $kak_opt_langmap_default $kak_opt_langmap | kak -p $kak_session
 }}
 
 define-command -docstring 'langmap-display-layout <langmap>: display <langmap> option value in info box formatted as keyboard layout. Accepts ''%opt{langmap_lang_map}'' or str-list formatted langmap as a parameter' \
 langmap-display-layout -params 2 %{ evaluate-commands %sh{
-    dir_name() {
-        filename=$1
-        case "$filename" in
-            */*[!/]*)
-                trail=${filename##*[!/]}
-                filename=${filename%%"$trail"}
-                dir=${filename%/*} ;;
-            *[!/]*)
-                trail=${filename##*[!/]}
-                dir="." ;;
-            *)
-                dir="/" ;;
-        esac
-        printf "%s\n" "$dir"
-    }
-
-    # hack to bring options to the scope:
     # $kak_client
-
-    langmap_dir=$(dir_name $kak_opt_langmap_source)
-    perl $langmap_dir/../perl/display_layout.pl $@ | kak -p $kak_session
+    perl $kak_opt_langmap_root/perl/display_layout.pl $@ | kak -p $kak_session
 }}
 
 }
