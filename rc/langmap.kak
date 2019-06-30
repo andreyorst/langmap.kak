@@ -69,7 +69,7 @@ langmap-display-layout -params 2 %{ evaluate-commands %sh{
 
 # powerline.kak support
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-hook global ModuleLoad powerline %{ require-module langmap_powerline }
+hook global ModuleLoaded powerline %{ require-module langmap_powerline }
 
 provide-module langmap_powerline %{
 
