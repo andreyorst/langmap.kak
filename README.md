@@ -1,5 +1,3 @@
-# THIS PLUGIN IS NOT ACTIVELY MAINTAINED. FOR MORE DETAILS PLEASE SEE [THIS DISCOURSE POST](https://discuss.kakoune.com/t/maintainance-warning-and-request)
-
 # langmap.kak
 
 If you use more than one keyboard layout that you toggle with your keyboard
