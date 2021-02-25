@@ -11,8 +11,6 @@ declare-option -docstring 'Additional langmap to use in insert mode. Must be a s
 lang_name lang_map. Available langmaps can be browsed with %opt{langmap_langmuage_name}' \
 str-list langmap
 
-hook -once -group langmap-loader global WinSetOption langmap=.+ %{ require-module langmap }
-
 declare-option -hidden -docstring %sh{printf "%s\n" "location of the langmap plugin root directory.
         Value: ${kak_source%/rc/*}"} \
 str langmap_root %sh{printf "%s\n" "${kak_source%/rc/*}"}
