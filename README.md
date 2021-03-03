@@ -13,7 +13,7 @@ mode within Kakoune. That is, with this plugin you'll be able to toggle layout
 within Kakoune, without changing your operating system layout.
 
 ## Installation
-### With [plug.kak][2] (recommended)
+### With [plug.kak][2]
 Add this to your `kakrc`:
 
 ``` sh
@@ -22,10 +22,10 @@ plug "andreyorst/langmap.kak" config %{
     set-option global langmap %opt{langmap_ru_jcuken}
 } defer "langmap" %{
     # optional: mappings to toggle langmap
-    map -docstring "toggle layout (C-\)" global normal '' ':      toggle-langmap<ret>'
-    map -docstring "toggle layout (C-\)" global insert '' '<a-;>: toggle-langmap<ret>'
-    map -docstring "toggle layout (C-\)" global prompt '' '<a-;>: toggle-langmap prompt<ret>'
-}
+    map -docstring "toggle layout" global normal '<c-\>' ':      toggle-langmap<ret>'
+    map -docstring "toggle layout" global insert '<c-\>' '<a-;>: toggle-langmap<ret>'
+    map -docstring "toggle layout" global prompt '<c-\>' '<a-;>: toggle-langmap prompt<ret>'
+} defer
 ```
 
 Restart Kakoune, or re-source your `kakrc` and call `:plug-install`
