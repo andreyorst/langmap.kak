@@ -20,12 +20,12 @@ Add this to your `kakrc`:
 plug "andreyorst/langmap.kak" config %{
     # add needed extra layout, for example Russian 'йцукен'
     set-option global langmap %opt{langmap_ru_jcuken}
-} defer "langmap" %{
+} demand "langmap" %{
     # optional: mappings to toggle langmap
     map -docstring "toggle layout" global normal '<c-\>' ':      toggle-langmap<ret>'
     map -docstring "toggle layout" global insert '<c-\>' '<a-;>: toggle-langmap<ret>'
     map -docstring "toggle layout" global prompt '<c-\>' '<a-;>: toggle-langmap prompt<ret>'
-} defer
+}
 ```
 
 Restart Kakoune, or re-source your `kakrc` and call `:plug-install`
